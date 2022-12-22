@@ -11,6 +11,17 @@ MongoClient.connect(connectionURL, {
     }
 
     const db = client.db(databaseName);
+    const fortunes = db.collection('fortunes');
+
+    fortunes.aggregate(
+        [
+            { $sample: { size: 1 } }
+        ]
+    ).next((err, fortune) => {
+        if (!err) {
+            return fortune;
+        }
+    })
 
     // db.collection('words').deleteOne({
     //     word: "shook"
